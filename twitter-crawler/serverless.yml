@@ -42,8 +42,9 @@ provider:
 #            - "/*"
 
 # you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+  # environment:
+    # MY_VAR: abc
+    # SECRET_VAR: ${file(./serverless.env.yml):${opt:stage}.SECRET_VAR}
 
 # you can add packaging information here
 #package:
@@ -88,8 +89,17 @@ functions:
 #          trigger: PreSignUp
 
 #    Define function environment variables here
-#    environment:
-#      variable2: value2
+    environment:
+
+      # Twitter
+      consumer_key: ${file(./serverless.env.yml):${self:provider.stage}.twit.consumer_key}
+      consumer_secret: ${file(./serverless.env.yml):${self:provider.stage}.twit.consumer_secret}
+      access_token: ${file(./serverless.env.yml):${self:provider.stage}.twit.access_token}
+      access_token_secret: ${file(./serverless.env.yml):${self:provider.stage}.twit.access_token_secret}
+
+      # Watson Personality Insights
+      p_insights_username: ${file(./serverless.env.yml):${self:provider.stage}.p_insights.username}
+      p_insights_password: ${file(./serverless.env.yml):${self:provider.stage}.p_insights.password}
 
 # you can add CloudFormation resource templates here
 # resources:
