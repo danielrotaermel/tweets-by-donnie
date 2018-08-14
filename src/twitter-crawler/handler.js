@@ -13,10 +13,19 @@ const T = new Twit({
 });
 
 const personalityInsights = new PersonalityInsightsV3({
-  url: 'https://gateway.watsonplatform.net/personality-insights/api',
+  url: process.env.personalityInsights_url,
   version: '2016-10-19',
-  username: process.env.p_insights_username,
-  password: process.env.p_insights_password,
+  username: process.env.personalityInsights_username,
+  password: process.env.personalityInsights_password,
+});
+
+const ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
+
+const toneAnalyzer = new ToneAnalyzerV3({
+  url: process.env.toneAnalyzer_url,
+  version: '2017-09-21',
+  username: process.env.toneAnalyzer_username,
+  password: process.env.toneAnalyzer_password,
 });
 
 module.exports.hello = (event, context, callback) => {
@@ -33,7 +42,7 @@ module.exports.hello = (event, context, callback) => {
   }
 
   function preProcessTweets(err, data) {
-    // time range: 24h ago to now s
+    // time range: 24h ago to now
     const today = moment();
     const yesterday = moment(today.valueOf() - 7 * 24 * 60 * 60 * 1000);
     let relevantTweets = data.filter(
@@ -53,7 +62,24 @@ module.exports.hello = (event, context, callback) => {
     const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi;
     tweets = tweets.replace(urlRegex, '');
 
-    addEnrichments(tweets);
+    // addEnrichments(tweets);
+    analyzeTone(tweets);
+  }
+
+  function analyzeTone(text) {
+    const toneParams = {
+      tone_input: { text },
+      content_type: 'application/json',
+    };
+
+    toneAnalyzer.tone(toneParams, (error, response) => {
+      if (error) {
+        console.log(error);
+      } else {
+        // console.log(JSON.stringify(response, null, 2));
+        sendResponse(response);
+      }
+    });
   }
 
   function addEnrichments(tweets) {
@@ -67,7 +93,7 @@ module.exports.hello = (event, context, callback) => {
       if (err) {
         console.log('error:', err);
       } else {
-        console.log(JSON.stringify(response, null, 2));
+        // console.log(JSON.stringify(response, null, 2));
         sendResponse(response);
       }
     });
@@ -90,7 +116,6 @@ module.exports.hello = (event, context, callback) => {
       body: {
         message: 'Go Serverless!',
         input: event,
-        twit: process.env.twit,
         response,
       },
     };

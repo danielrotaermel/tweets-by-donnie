@@ -21,7 +21,7 @@ provider:
   name: aws
   runtime: nodejs6.10
 
-# you can overwrite defaults here
+  # you can overwrite defaults here
   stage: dev
   region: eu-central-1
 
@@ -42,9 +42,9 @@ provider:
 #            - "/*"
 
 # you can define service wide environment variables here
-  # environment:
-    # MY_VAR: abc
-    # SECRET_VAR: ${file(./serverless.env.yml):${opt:stage}.SECRET_VAR}
+# environment:
+# MY_VAR: abc
+# SECRET_VAR: ${file(./serverless.env.yml):${opt:stage}.SECRET_VAR}
 
 # you can add packaging information here
 #package:
@@ -59,38 +59,37 @@ functions:
   hello:
     handler: handler.hello
 
-#    The following are a few example events you can configure
-#    NOTE: Please make sure to change your handler code to work with those events
-#    Check the event documentation for details
-#    events:
-#      - http:
-#          path: users/create
-#          method: get
-#      - s3: ${env:BUCKET}
-#      - schedule: rate(10 minutes)
-#      - sns: greeter-topic
-#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
-#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
-#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
-#      - iot:
-#          sql: "SELECT * FROM 'some_topic'"
-#      - cloudwatchEvent:
-#          event:
-#            source:
-#              - "aws.ec2"
-#            detail-type:
-#              - "EC2 Instance State-change Notification"
-#            detail:
-#              state:
-#                - pending
-#      - cloudwatchLog: '/aws/lambda/hello'
-#      - cognitoUserPool:
-#          pool: MyUserPool
-#          trigger: PreSignUp
+    #    The following are a few example events you can configure
+    #    NOTE: Please make sure to change your handler code to work with those events
+    #    Check the event documentation for details
+    #    events:
+    #      - http:
+    #          path: users/create
+    #          method: get
+    #      - s3: ${env:BUCKET}
+    #      - schedule: rate(10 minutes)
+    #      - sns: greeter-topic
+    #      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
+    #      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
+    #      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
+    #      - iot:
+    #          sql: "SELECT * FROM 'some_topic'"
+    #      - cloudwatchEvent:
+    #          event:
+    #            source:
+    #              - "aws.ec2"
+    #            detail-type:
+    #              - "EC2 Instance State-change Notification"
+    #            detail:
+    #              state:
+    #                - pending
+    #      - cloudwatchLog: '/aws/lambda/hello'
+    #      - cognitoUserPool:
+    #          pool: MyUserPool
+    #          trigger: PreSignUp
 
-#    Define function environment variables here
+    #    Define function environment variables here
     environment:
-
       # Twitter
       consumer_key: ${file(./serverless.env.yml):${self:provider.stage}.twit.consumer_key}
       consumer_secret: ${file(./serverless.env.yml):${self:provider.stage}.twit.consumer_secret}
@@ -98,8 +97,13 @@ functions:
       access_token_secret: ${file(./serverless.env.yml):${self:provider.stage}.twit.access_token_secret}
 
       # Watson Personality Insights
-      p_insights_username: ${file(./serverless.env.yml):${self:provider.stage}.p_insights.username}
-      p_insights_password: ${file(./serverless.env.yml):${self:provider.stage}.p_insights.password}
+      personalityInsights_url: ${file(./serverless.env.yml):${self:provider.stage}.personalityInsights.url}
+      personalityInsights_username: ${file(./serverless.env.yml):${self:provider.stage}.personalityInsights.username}
+      personalityInsights_password: ${file(./serverless.env.yml):${self:provider.stage}.personalityInsights.password}
+
+      toneAnalyzer_url: ${file(./serverless.env.yml):${self:provider.stage}.toneAnalyzer.url}
+      toneAnalyzer_username: ${file(./serverless.env.yml):${self:provider.stage}.toneAnalyzer.username}
+      toneAnalyzer_password: ${file(./serverless.env.yml):${self:provider.stage}.toneAnalyzer.password}
 
 # you can add CloudFormation resource templates here
 # resources:
