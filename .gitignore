@@ -10,3 +10,5 @@ jspm_packages
 !.vscode/extensions.json
 
 credentials.csv
+.vscode
+.vscode/settings.json
