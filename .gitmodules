@@ -1,0 +1,3 @@
+[submodule "src/aws_twitter2kinesis"]
+	path = src/aws_twitter2kinesis
+	url = https://github.com/danielrotaermel/twitter2kinesis
