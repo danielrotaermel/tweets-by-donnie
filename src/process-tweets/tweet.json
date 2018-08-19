@@ -1,0 +1,107 @@
+{
+  "lang": "en",
+  "extended_tweet": {
+    "entities": {
+      "hashtags": [],
+      "user_mentions": [
+        {
+          "screen_name": "realDonaldTrump",
+          "indices": [0, 16],
+          "id": 25073877,
+          "name": "Donald J. Trump",
+          "id_str": "25073877"
+        }
+      ],
+      "urls": [],
+      "symbols": []
+    },
+    "display_text_range": [17, 156],
+    "full_text": "@realDonaldTrump Good grief, your tweets are so boring. Do you honestly think if you keep tweeting, \"no collusion\" that someone will eventually believe it?"
+  },
+  "favorite_count": 0,
+  "quote_count": 0,
+  "source": "http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android",
+  "retweeted": false,
+  "filter_level": "low",
+  "created_at": "Sun Aug 19 19:42:35 +0000 2018",
+  "geo": null,
+  "reply_count": 0,
+  "in_reply_to_screen_name": "realDonaldTrump",
+  "in_reply_to_status_id_str": "1031141396776984576",
+  "text": "@realDonaldTrump Good grief, your tweets are so boring. Do you honestly think if you keep tweeting, \"no collusion\"\u2026 https://t.co/tlFyt2dtab",
+  "place": null,
+  "is_quote_status": false,
+  "in_reply_to_user_id_str": "25073877",
+  "in_reply_to_user_id": 25073877,
+  "user": {
+    "profile_sidebar_border_color": "C0DEED",
+    "statuses_count": 60,
+    "contributors_enabled": false,
+    "profile_sidebar_fill_color": "DDEEF6",
+    "default_profile_image": false,
+    "utc_offset": null,
+    "profile_background_tile": false,
+    "follow_request_sent": null,
+    "url": null,
+    "protected": false,
+    "profile_image_url_https": "https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png",
+    "created_at": "Thu Feb 02 20:19:56 +0000 2017",
+    "lang": "en",
+    "friends_count": 93,
+    "notifications": null,
+    "location": null,
+    "screen_name": "marybeth1239",
+    "profile_background_color": "F5F8FA",
+    "id_str": "827250218437636096",
+    "profile_background_image_url_https": "",
+    "time_zone": null,
+    "profile_text_color": "333333",
+    "description": null,
+    "geo_enabled": false,
+    "favourites_count": 198,
+    "profile_background_image_url": "",
+    "profile_link_color": "1DA1F2",
+    "translator_type": "none",
+    "id": 827250218437636096,
+    "listed_count": 0,
+    "default_profile": true,
+    "name": "Mary Youngblut",
+    "profile_use_background_image": true,
+    "verified": false,
+    "followers_count": 9,
+    "following": null,
+    "profile_image_url": "http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png",
+    "is_translator": false
+  },
+  "entities": {
+    "hashtags": [],
+    "user_mentions": [
+      {
+        "screen_name": "realDonaldTrump",
+        "indices": [0, 16],
+        "id": 25073877,
+        "name": "Donald J. Trump",
+        "id_str": "25073877"
+      }
+    ],
+    "urls": [
+      {
+        "expanded_url": "https://twitter.com/i/web/status/1031265189780447233",
+        "display_url": "twitter.com/i/web/status/1\u2026",
+        "indices": [117, 140],
+        "url": "https://t.co/tlFyt2dtab"
+      }
+    ],
+    "symbols": []
+  },
+  "timestamp_ms": "1534707755881",
+  "favorited": false,
+  "id": 1031265189780447233,
+  "id_str": "1031265189780447233",
+  "retweet_count": 0,
+  "truncated": true,
+  "in_reply_to_status_id": 1031141396776984576,
+  "coordinates": null,
+  "contributors": null,
+  "display_text_range": [17, 140]
+}
