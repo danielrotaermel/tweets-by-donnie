@@ -1,0 +1,139 @@
+# Welcome to serverless. Read the docs
+# https://serverless.com/framework/docs/
+
+service: clout-analysis-frontend
+
+plugins:
+  - serverless-sync-s3buckets
+
+custom:
+  syncS3Buckets:
+    - bucketRef: StaticSite
+      localDir: static
+  hostedZoneName: clout-analysis.com
+  hostedZoneId: Z3AQBSTGFYJSTF    # us east
+  aliasDNSName: s3-website-us-east-1.amazonaws.com
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  stackTags:
+    serverless:servess: ${self:service}
+
+resources:
+  Resources:
+    ## Specifying the S3 Bucket
+    StaticSite:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: index.html
+
+    StaticSiteS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: StaticSite
+        PolicyDocument:
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Principal: '*'
+              Action:
+                - s3:GetObject
+              Resource:
+                Fn::Join: [
+                  "", [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "StaticSite"
+                    },
+                    "/*"
+                  ]
+                ]
+
+    # StaticSiteCert:
+    #   Type: AWS::CertificateManager::Certificate
+    #   Properties:
+    #     DomainName: ${self:custom.hostedZoneName}
+    #     DomainValidationOptions:
+    #     - DomainName: ${self:custom.hostedZoneName}
+    #       ValidationDomain: ${self:custom.hostedZoneName}
+
+    # CloudFrontDistribution:
+      # Type: AWS::CloudFront::Distribution
+      # Properties:
+        # DistributionConfig:
+        #   Origins:
+        #     - DomainName:
+        #         Fn::Join: [
+        #           "", [
+        #             { "Ref": "StaticSite" },
+        #             ".s3.amazonaws.com"
+        #           ]
+        #         ]
+        #       # It isn't necessary to sue this value; but we need the same
+        #       # value for DefaultCacheBehavior.TargetOriginId
+        #       Id:
+        #         Ref: StaticSite
+        #       CustomOriginConfig:
+        #         HTTPPort: 80
+        #         HTTPSPort: 443
+        #         OriginProtocolPolicy: https-only
+        #   Enabled: 'true'
+        #   Aliases:
+        #     - ${self:custom.hostedZoneName}
+        #   DefaultRootObject: index.html
+        #   CustomErrorResponses:
+        #     - ErrorCode: 404
+        #       ResponseCode: 200
+        #       ResponsePagePath: /index.html
+        #   DefaultCacheBehavior:
+        #     AllowedMethods:
+        #       - GET
+        #       - HEAD
+        #     TargetOriginId:
+        #       Ref: StaticSite
+        #     ForwardedValues:
+        #       QueryString: 'false'
+        #       Cookies:
+        #         Forward: none
+        #     ViewerProtocolPolicy: redirect-to-https
+          # ViewerCertificate:
+          #   AcmCertificateArn:
+          #     Ref: StaticSiteCert
+          #   SslSupportMethod: sni-only
+          ## Uncomment the following section in case you want to enable logging for CloudFront requests
+          # Logging:
+          #  IncludeCookies: 'false'
+          #   Bucket: mylogs.s3.amazonaws.com
+          #   Prefix: myprefix
+      # DependsOn:
+      #   - StaticSiteS3BucketPolicy
+
+    # DnsRecord:
+    #   Type: "AWS::Route53::RecordSet"
+    #   Properties:
+    #     AliasTarget:
+    #       DNSName:
+    #         Fn::GetAtt:
+    #           - CloudFrontDistribution
+    #           - DomainName
+    #       HostedZoneId: ${self:custom.hostedZoneId}
+    #     HostedZoneName: ${self:custom.hostedZoneName}.
+    #     Name: ${self:custom.hostedZoneName}.
+    #     Type: 'A'
+
+  Outputs:
+    StaticSiteS3BucketName:
+      Value:
+        Ref: StaticSite
+    # CloudFrontDistribution:
+    #   Value:
+    #     Fn::GetAtt:
+    #       - CloudFrontDistribution
+    #       - DomainName
+

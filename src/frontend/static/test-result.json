@@ -1,0 +1,34 @@
+{
+    "document_tone": {
+        "tones": [{
+            "score": 0.613858,
+            "tone_id": "sadness",
+            "tone_name": "Sadness"
+        }, {
+            "score": 0.694442,
+            "tone_id": "analytical",
+            "tone_name": "Analytical"
+        }]
+    },
+    "sentences_tone": [{
+        "sentence_id": 0,
+        "text": "Team, I know that times are tough20Product sales have been disappointing for the past three quarters.",
+        "tones": [{
+            "score": 0.652666,
+            "tone_id": "sadness",
+            "tone_name": "Sadness"
+        }, {
+            "score": 0.506763,
+            "tone_id": "analytical",
+            "tone_name": "Analytical"
+        }]
+    }, {
+        "sentence_id": 1,
+        "text": "We have a competitive product, but we need to do a better job of selling it",
+        "tones": [{
+            "score": 0.506763,
+            "tone_id": "analytical",
+            "tone_name": "Analytical"
+        }]
+    }]
+}
