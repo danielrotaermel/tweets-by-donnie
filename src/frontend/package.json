@@ -2,7 +2,9 @@
   "name": "frontend",
   "description": "",
   "version": "0.1.0",
-  "dependencies": {},
+  "dependencies": {
+    "serverless-sync-s3buckets": "^1.0.1"
+  },
   "devDependencies": {
     "serverless-s3-sync": "^1.6.1"
   }

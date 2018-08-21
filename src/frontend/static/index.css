@@ -1,0 +1,15 @@
+body {
+    background-color:cyan;
+}
+
+tweets-container {
+    background-color: papayawhip;
+    width: 200px;
+    height: 200px;
+}
+
+tweets-stats-container {
+    background-color: darkmagenta;
+    width: 200px;
+    height: 200px;
+}
