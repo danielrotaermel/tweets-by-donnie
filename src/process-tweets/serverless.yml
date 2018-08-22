@@ -17,6 +17,11 @@ provider:
     OTHER_TWEETS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-other-tweets
     TRUMPS_TWEETS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-trumps-tweets
 
+    # Watson tone analyzer
+    toneAnalyzer_url: ${file(./serverless.env.yml):${self:provider.stage}.toneAnalyzer.url}
+    toneAnalyzer_username: ${file(./serverless.env.yml):${self:provider.stage}.toneAnalyzer.username}
+    toneAnalyzer_password: ${file(./serverless.env.yml):${self:provider.stage}.toneAnalyzer.password}
+
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -27,6 +32,11 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
         - dynamodb:BatchWriteItem
+          #  permissions needed for stream
+        - dynamodb:GetRecords
+        - dynamodb:GetShardIterator
+        - dynamodb:DescribeStream
+        - dynamodb:ListStreams
       Resource:
         - Fn::GetAtt:
             - TrumpsTweetsDynamoDbTable
@@ -45,20 +55,6 @@ provider:
         - 'kinesis:*'
       Resource: ${self:custom.twitter2kinesis-arn}
 
-  #
-  # - arn:aws:dynamodb:us-east-1:525842372805:table/clout-analysis-backend-dev-other-tweets
-  # - arn:aws:dynamodb:us-east-1:525842372805:table/clout-analysis-backend-dev-periodic-clout-reports
-  # - arn:aws:dynamodb:us-east-1:525842372805:table/clout-analysis-backend-dev-trumps-enriched-tweets
-  # - arn:aws:dynamodb:us-east-1:525842372805:table/clout-analysis-backend-dev-trumps-tweets
-  # - 'arn:aws:dynamodb:${self:provider.environment.PERIODIC_CLOUT_REPORTS_TABLE}'
-  # - 'arn:aws:dynamodb:${self:provider.environment.TRUMPS_ENRICHED_TWEETS_TABLE}'
-  # - 'arn:aws:dynamodb:${self:provider.environment.OTHER_TWEETS_TABLE}'
-  # - 'arn:aws:dynamodb:${self:provider.environment.TRUMPS_TWEETS_TABLE}'
-
-# service wide environment variables
-# environment:
-#   variable1: value1
-
 functions:
   preprocess:
     handler: preprocess.preprocess
@@ -66,31 +62,48 @@ functions:
       - stream:
           type: kinesis
           arn: ${self:custom.twitter2kinesis-arn}
-          batchSize: 10
+          batchSize: 300
           startingPosition: LATEST
           enabled: true
+
   postprocess:
     handler: postprocess.postprocess
     events:
       - stream:
           type: dynamodb
           arn:
-            Fn::GetAtt: [TrumpsEnrichedTweetsDynamoDbTable, StreamArn]
+            Fn::GetAtt: [TrumpsTweetsDynamoDbTable, StreamArn]
           batchSize: 1
           startingPosition: LATEST
           enabled: true
+
   periodicCloutReports:
     handler: periodicCloutReports.periodicCloutReports
     events:
       - schedule:
           name: enrichTweets
           description: 'runs every 20 minutes'
-          rate: rate(20 minutes)
+          rate: rate(10 minutes)
           enabled: true
+    environment:
+      schedule: 10
 
-#    Define function environment variables here
-#    environment:
-#      variable2: value2
+  # api
+  getEnrichedTweets:
+    handler: api/get.getEnrichedTweets
+    events:
+      - http:
+          path: enriched-tweets/{day}
+          method: get
+          cors: true
+
+  getReports:
+    handler: api/get.getReports
+    events:
+      - http:
+          path: reports/{day}
+          method: get
+          cors: true
 
 resources:
   Resources:
@@ -112,6 +125,8 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.TRUMPS_TWEETS_TABLE}
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
 
     OtherTweetsDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
@@ -150,19 +165,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.TRUMPS_ENRICHED_TWEETS_TABLE}
-        StreamSpecification:
-          StreamViewType: NEW_IMAGE
-
-    # DataTableStream:
-    #   Type: AWS::Lambda::EventSourceMapping
-    #   Properties:
-    #     BatchSize: 1
-    #     Enabled: True
-    #     EventSourceArn:
-    #       Fn::GetAtt: [TrumpsEnrichedTweetsDynamoDbTable, StreamArn]
-    #     FunctionName:
-    #       Fn::GetAtt: [postprocess, Arn]
-    #     StartingPosition: LATEST
 
     PeriodicCloutReportsDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
@@ -182,3 +184,17 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.PERIODIC_CLOUT_REPORTS_TABLE}
+    # Outputs:
+    #   NewServiceExport:
+    #     Value: 'A Value To Export'
+    #     Export:
+    #       Name: 'ksf'
+    # Outputs:
+    #   ApiUrl:
+    #     Description: 'The API Gateway URL'
+    #     Value:
+    #       Fn::Join:
+    #         - ''
+    #         - - 'https://'
+    #           - Ref: ApiGatewayRestApi
+    #           - '.execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}'
