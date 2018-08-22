@@ -9,10 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "buffer-from": "^1.1.1",
     "aws-sdk": "^2.296.0",
-    "serverless-dynamodb-local": "^0.2.31",
-    "serverless-offline": "^3.25.8",
-    "uuid": "^3.3.2"
+    "buffer-from": "^1.1.1",
+    "clean-deep": "^3.0.2",
+    "serverless": "^1.29.2",
+    "watson-developer-cloud": "^3.9.0"
   }
 }
