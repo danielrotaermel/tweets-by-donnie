@@ -3,6 +3,7 @@
   "description": "",
   "version": "0.1.0",
   "dependencies": {
+    "serverless": "^1.30.3",
     "serverless-sync-s3buckets": "^1.0.1"
   },
   "devDependencies": {
