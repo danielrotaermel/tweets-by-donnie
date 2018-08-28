@@ -16,7 +16,7 @@ module.exports.postprocess = (event, context, callback) => {
   console.log('got a tweet from trump');
   event.Records.forEach((record) => {
     console.log('Stream record: ', JSON.stringify(record, null, 2));
-    if (record.eventName == 'INSERT') {
+    if (record.eventName === 'INSERT') {
       console.log('INSERT');
       const tweet = AWS.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage);
       console.log('twet: ', tweet);

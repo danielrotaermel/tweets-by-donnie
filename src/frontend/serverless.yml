@@ -1,6 +1,3 @@
-# Welcome to serverless. Read the docs
-# https://serverless.com/framework/docs/
-
 service: clout-analysis-frontend
 
 plugins:
@@ -55,85 +52,7 @@ resources:
                   ]
                 ]
 
-    # StaticSiteCert:
-    #   Type: AWS::CertificateManager::Certificate
-    #   Properties:
-    #     DomainName: ${self:custom.hostedZoneName}
-    #     DomainValidationOptions:
-    #     - DomainName: ${self:custom.hostedZoneName}
-    #       ValidationDomain: ${self:custom.hostedZoneName}
-
-    # CloudFrontDistribution:
-      # Type: AWS::CloudFront::Distribution
-      # Properties:
-        # DistributionConfig:
-        #   Origins:
-        #     - DomainName:
-        #         Fn::Join: [
-        #           "", [
-        #             { "Ref": "StaticSite" },
-        #             ".s3.amazonaws.com"
-        #           ]
-        #         ]
-        #       # It isn't necessary to sue this value; but we need the same
-        #       # value for DefaultCacheBehavior.TargetOriginId
-        #       Id:
-        #         Ref: StaticSite
-        #       CustomOriginConfig:
-        #         HTTPPort: 80
-        #         HTTPSPort: 443
-        #         OriginProtocolPolicy: https-only
-        #   Enabled: 'true'
-        #   Aliases:
-        #     - ${self:custom.hostedZoneName}
-        #   DefaultRootObject: index.html
-        #   CustomErrorResponses:
-        #     - ErrorCode: 404
-        #       ResponseCode: 200
-        #       ResponsePagePath: /index.html
-        #   DefaultCacheBehavior:
-        #     AllowedMethods:
-        #       - GET
-        #       - HEAD
-        #     TargetOriginId:
-        #       Ref: StaticSite
-        #     ForwardedValues:
-        #       QueryString: 'false'
-        #       Cookies:
-        #         Forward: none
-        #     ViewerProtocolPolicy: redirect-to-https
-          # ViewerCertificate:
-          #   AcmCertificateArn:
-          #     Ref: StaticSiteCert
-          #   SslSupportMethod: sni-only
-          ## Uncomment the following section in case you want to enable logging for CloudFront requests
-          # Logging:
-          #  IncludeCookies: 'false'
-          #   Bucket: mylogs.s3.amazonaws.com
-          #   Prefix: myprefix
-      # DependsOn:
-      #   - StaticSiteS3BucketPolicy
-
-    # DnsRecord:
-    #   Type: "AWS::Route53::RecordSet"
-    #   Properties:
-    #     AliasTarget:
-    #       DNSName:
-    #         Fn::GetAtt:
-    #           - CloudFrontDistribution
-    #           - DomainName
-    #       HostedZoneId: ${self:custom.hostedZoneId}
-    #     HostedZoneName: ${self:custom.hostedZoneName}.
-    #     Name: ${self:custom.hostedZoneName}.
-    #     Type: 'A'
-
   Outputs:
     StaticSiteS3BucketName:
       Value:
         Ref: StaticSite
-    # CloudFrontDistribution:
-    #   Value:
-    #     Fn::GetAtt:
-    #       - CloudFrontDistribution
-    #       - DomainName
-

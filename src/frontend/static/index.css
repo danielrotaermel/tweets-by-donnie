@@ -1,41 +1,10 @@
 body {
-    background-color: #fcfcfc;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-align: center;
+  background-color: #fcfcfc;
+  font-family: 'Fredoka One', cursive;
+  /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+  text-align: center;
 }
 
 h1 {
-    grid-column-start: 1;
-    grid-column-end: 4;
-}
-
-.main-container {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    grid-gap: 10px;
-}
-
-#twitter-tweet {
-    grid-column-start: 1;
-    grid-column-end: 2;
-    grid-row-start: 2;
-    grid-row-end: 3;
-}
-
-.tweet-stats-container {
-    grid-column-start: 2;
-    grid-column-end: 4;
-}
-
-.reply-stats-container {
-    grid-column-start: 2;
-    grid-column-end: 4;
-}
-
-#tweet-stats {
-    width: 80%
-}
-
-#reply-stats {
-    width: 80%
+  font-size: 3em;
 }

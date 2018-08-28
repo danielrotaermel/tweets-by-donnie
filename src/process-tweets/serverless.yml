@@ -181,7 +181,7 @@ resources:
           - AttributeName: timestamp_ms
             KeyType: RANGE
         ProvisionedThroughput:
-          ReadCapacityUnits: 1
+          ReadCapacityUnits: 3
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.PERIODIC_CLOUT_REPORTS_TABLE}
     # Outputs:

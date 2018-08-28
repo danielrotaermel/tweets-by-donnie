@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
+const AWS = require('aws-sdk');
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
@@ -6,12 +6,13 @@ module.exports.getEnrichedTweets = (event, context, callback) => {
   const date = event.pathParameters.day;
 
   if (!isValidDay(date)) {
-    const response = addCors({
+    const response = {
       statusCode: 400,
       headers: { 'Content-Type': 'text/plain' },
       body: `${date} non-valid day parameter - use a date like this one 2018-08-22`,
-    });
-    callback(null, response);
+    };
+
+    callback(null, addCors(response));
   }
 
   const params = {
@@ -23,6 +24,7 @@ module.exports.getEnrichedTweets = (event, context, callback) => {
     ExpressionAttributeValues: {
       ':day': date,
     },
+    // Limit: 1,
   };
 
   // fetch enriched tweets from the database
@@ -32,21 +34,21 @@ module.exports.getEnrichedTweets = (event, context, callback) => {
     .then((res) => {
       console.log(`Query succeeded, got ${res.Items.length} items`);
       // create a response
-      const response = addCors({
+      const response = {
         statusCode: 200,
         body: JSON.stringify(res),
-      });
-      callback(null, response);
+      };
+      callback(null, addCors(response));
     })
     .catch((err) => {
       console.error('Unable to query. Error:', JSON.stringify(err, null, 2));
       console.error(err);
-      const response = addCors({
+      const response = {
         statusCode: err.statusCode || 501,
         headers: { 'Content-Type': 'text/plain' },
-        body: "Couldn't fetch the todo item.",
-      });
-      callback(null, response);
+        body: "Couldn't fetch the item.",
+      };
+      callback(null, addCors(response));
     });
 };
 
@@ -54,12 +56,12 @@ module.exports.getReports = (event, context, callback) => {
   const date = event.pathParameters.day;
 
   if (!isValidDay(date)) {
-    const response = addCors({
+    const response = {
       statusCode: 400,
       headers: { 'Content-Type': 'text/plain' },
       body: `${date} non-valid day parameter - use a date like this one 2018-08-22`,
-    });
-    callback(null, response);
+    };
+    callback(null, addCors(response));
   }
 
   const params = {
@@ -71,6 +73,8 @@ module.exports.getReports = (event, context, callback) => {
     ExpressionAttributeValues: {
       ':day': date,
     },
+    // Limit: 20,
+    // ScanIndexForward: false
   };
 
   // fetch enriched tweets from the database
@@ -79,22 +83,27 @@ module.exports.getReports = (event, context, callback) => {
     .promise()
     .then((res) => {
       console.log(`Query succeeded, got ${res.Items.length} items`);
+      // delete unneeded sentence_stone
+      res.Items = res.Items.map((item) => {
+        const newItem = item;
+        delete newItem.sentences_tone;
+        return newItem;
+      });
       // create a response
-      const response = addCors({
+      const response = {
         statusCode: 200,
         body: JSON.stringify(res),
-      });
-      callback(null, response);
+      };
+      callback(null, addCors(response));
     })
     .catch((err) => {
       console.error('Unable to query. Error:', JSON.stringify(err, null, 2));
-      console.error(err);
-      const response = addCors({
+      const response = {
         statusCode: err.statusCode || 501,
         headers: { 'Content-Type': 'text/plain' },
-        body: "Couldn't fetch the todo item.",
-      });
-      callback(null, response);
+        body: "Couldn't fetch the item.",
+      };
+      callback(null, addCors(response));
     });
 };
 

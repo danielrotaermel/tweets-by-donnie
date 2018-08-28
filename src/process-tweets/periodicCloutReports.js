@@ -19,10 +19,15 @@ module.exports.periodicCloutReports = (event, context, callback) => {
   getLatestTweets(process.env.schedule)
     .then((res) => {
       console.log(`Query succeeded, got ${res.Items.length} tweets`);
+      // concat text fields
       const allTweetsText = res.Items.map(tweet => tweet.text).join('.\n');
       return analyzeToneAsync(allTweetsText);
     })
-    .then(res => writeReport(res))
+    .then((res) => {
+      // delete unneeded sentencestone
+      delete res.sentences_tone;
+      writeReport(res);
+    })
     .then(() => console.log('written report'))
     .catch(err => console.error('Error:', JSON.stringify(err, null, 2)));
 };

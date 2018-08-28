@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,93 +8,63 @@
     <title>Document</title>
     <script>console.log("hi there!")</script>
     <link rel="stylesheet" href="index.css">
-    <script src="index.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
+    <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.1.0/flexboxgrid2.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <script>window.twttr = (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0],
+                t = window.twttr || {};
+            if (d.getElementById(id)) return t;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js, fjs);
+            t._e = [];
+            t.ready = function (f) {
+                t._e.push(f);
+            };
+            return t;
+        }(document, "script", "twitter-wjs"));</script>
+    <script src="index.js"></script>
 </head>
-<body>
-    <div class="main-container">  
-            <h1>Tweets by Donnie</h1>
-            <blockquote class="twitter-tweet">
-                <a id='tweet' href="https://twitter.com/realDonaldTrump/status/929511061954297857?ref_src=twsrc%5Etfw"></a>
-                &mdash; Donald J. Trump (@realDonaldTrump) 
-            </blockquote>
-            <script>
-                id_str = '1031747927511916544';
-                screen_name = 'realDonaldTrump';
-                tweet = document.getElementById("tweet");
-                tweet.setAttribute('href', "https://twitter.com/" + screen_name + "/status/" + id_str + "?");
-            </script>
-            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-    
-            <div class="tweet-stats-container">
-                <h2>This Tweet's Sentiment</h2>
-                <div id="tweet-stats"></div>
+
+<body onload="onload()">
+    <div class="row center-xs">
+        <div class="col-xs-10">
+            <div class="row center-xs">
+                <div class="col-xs-5">
+                    <h1>Tweets by Donnie</h1>
+                </div>
             </div>
-            <div class="reply-stats-container">
-                <h2>Reactions by Emotion</h2>
-                <div id="reply-stats"></div>
+            <div class="row between-xs">
+                <div class="col-sm-6 col-xs-12 center-xs">
+                    <div class="box">
+                        <div id="container" class='twitter-tweet'></div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <div class="box">
+                        <div class="tweet-stats-container">
+                            <div id="tweet-stats"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row center-xs">
+                <div class="col-xs-12">
+                    <div class="reply-stats-container">
+                        <h1>Public Response</h1>
+                        <div id="reply-stats"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    </div>
 
-    <script>
-        new Morris.Bar({
-            element: 'tweet-stats',
-            data: [
-                { y: '😡', a: 1 },
-                { y: '😨', a: 1 },
-                { y: '😊', a: 1 },
-                { y: '😢', a: 0.5 },
-                { y: '🧐', a: 0.1 },
-                { y: '🤗', a: 0.75 }
-            ],
-            xkey: 'y',
-            ykeys: ['a'],
-            labels: [],
-            hideHover: 'always',
-            grid: false,
-            resize: true,
-            stacked: true,
-            gridTextSize: 30,
-            yLabelFormat: function (x) { return ""},
-            barGap:1,
-            barSizeRatio:0.8,
-            xLabelMargin: 10,
-            barColors: function (row, series, type) {
-                console.log("--> "+row.label, series, type);
-                if(false) return "black"
-                else return "#1da1f2"
-                if(row.label == "😡")      return "#ac2700";
-                else if(row.label == "😨") return "#2585a3";
-                else if(row.label == "😊") return "#c9ff4c";
-                else if(row.label == "😢") return "#2dd5ff";
-                else if(row.label == "🧐") return "#d5dfe1";
-                else if(row.label == "🤗") return "#ff8e56";
-                else return "#000";
-                }
-            });
-
-        new Morris.Line({
-            element: 'reply-stats',
-            data: [
-                { y: '2006', anger: 100, fear: 90 , sad: 50, happy: 30, analytical: 40, confident: 99},
-                { y: '2007', anger: 8, fear: 90 , sad: 90, happy: 30, analytical: 20, confident: 99},
-                { y: '2008', anger: 8, fear: 90 , sad: 90, happy: 30, analytical: 20, confident: 99},
-                { y: '2009', anger: 100, fear: 90 , sad: 50, happy: 30, analytical: 40, confident: 99},
-
-            ],
-            xkey: 'y',
-            yLabelFormat: function (x) { return ""},
-            ykeys: ['anger', 'fear', 'sad', 'happy', 'analytical', 'confident'],
-            labels: ['anger', 'fear', 'sad', 'happy', 'analytical', 'confident']
-            });
-
-        let sentiments_over_time = []
-        for in in x
-    </script>
 </body>
+
 </html>

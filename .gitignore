@@ -13,3 +13,4 @@ credentials.csv
 .vscode
 .vscode/settings.json
 src/process-tweets/serverless.env.yml
+experiments
