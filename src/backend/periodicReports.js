@@ -13,7 +13,7 @@ const toneAnalyzer = new ToneAnalyzerV3({
   password: process.env.toneAnalyzer_password,
 });
 
-module.exports.periodicCloutReports = (event, context, callback) => {
+module.exports.periodicReports = (event, context, callback) => {
   console.log('creating report');
 
   getLatestTweets(process.env.schedule)

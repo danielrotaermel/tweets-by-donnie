@@ -48,7 +48,7 @@ provider:
             - TrumpsEnrichedTweetsDynamoDbTable
             - Arn
         - Fn::GetAtt:
-            - PeriodicCloutReportsDynamoDbTable
+            - PeriodicReportsDynamoDbTable
             - Arn
     - Effect: 'Allow'
       Action:
@@ -77,12 +77,12 @@ functions:
           startingPosition: LATEST
           enabled: true
 
-  periodicCloutReports:
-    handler: periodicCloutReports.periodicCloutReports
+  periodicReports:
+    handler: periodicReports.periodicReports
     events:
       - schedule:
           name: enrichTweets
-          description: 'runs every 20 minutes'
+          description: 'runs every 10 minutes'
           rate: rate(10 minutes)
           enabled: true
     environment:
@@ -166,7 +166,7 @@ resources:
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.TRUMPS_ENRICHED_TWEETS_TABLE}
 
-    PeriodicCloutReportsDynamoDbTable:
+    PeriodicReportsDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
