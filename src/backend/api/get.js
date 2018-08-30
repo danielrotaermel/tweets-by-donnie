@@ -120,10 +120,10 @@ function isValidDay(day) {
   return false;
 }
 
+// Required for CORS support to work
 function addCors(response) {
-  // HERE'S THE CRITICAL PART
   if (response.headers) {
-    response.headers['Access-Control-Allow-Origin'] = '*'; // Required for CORS support to work
+    response.headers['Access-Control-Allow-Origin'] = '*';
   } else {
     response.headers = { 'Access-Control-Allow-Origin': '*' };
   }
